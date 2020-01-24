@@ -2,6 +2,7 @@
 
 // **** Require/Include all of our external dependencies (3rd party modules) ****
 
+
 // Express server library
 const express = require('express');
 // Create an application using express
@@ -40,6 +41,7 @@ app.set('views', './server/views');
 // Route Handler Definitions. Each express method and route should call
 // a method that the routes.js file exported
 app.get('/', routes.homePageHandler);
+
 
 // Wire in the defaults we required above.
 app.use('*', defaults.notFoundHandler);

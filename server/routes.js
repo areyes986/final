@@ -12,13 +12,23 @@ const database = require('./database.js');
 
 // In the routes file, app.get('/') calls this function
 
+
 function homePageHandler(req, res) {
   // Get page one of the API from star wars
+  const starUrl = `https://swapi.co/api/people/?page=1`
+
   // THEN, render an EJS Template with that data
+
+  superagent.get(starUrl)
+    .then(starResults => {
+      let starData = starResults.body.results;
+      res.render('index', { results: starData});
+    })
   fetchCharactersFromSWAPI(1)
     .then(data => res.render('index', data))
     .catch(error => { throw error; });
 }
+
 
 // Use superagent to get the star wars characters, by page
 function fetchCharactersFromSWAPI(pageNumber) {
@@ -38,6 +48,7 @@ function fetchCharactersFromSWAPI(pageNumber) {
 }
 
 
+
 // For each individual in the list of results, see if they
 // had a database entry and get the number of likes.
 // Add a .likes property to the character with that number if found
@@ -45,7 +56,7 @@ function getNumberOfLikes(data) {
 
   let names = data.results.map(person => person.name);
 
-  let SQL = "SELECT * FROM click_counts WHERE remote_id = ANY($1)";
+  let SQL = 'SELECT * FROM click_counts WHERE remote_id = ANY($1)';
 
   return database.query(SQL, [names])
 
